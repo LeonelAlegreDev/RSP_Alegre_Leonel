@@ -61,7 +61,23 @@ class HomeController
             body: JSON.stringify(vehiculo)
         });
         const result = await response.json();
-        return result;
+        const estado = response.status;
+        let res;
+
+        if (estado === 200) {
+            res = {
+                status: estado,
+                message: result
+            }
+
+        } else {
+            res = {
+                status: estado,
+                error: resonse.statusText,
+                message: result
+            };
+        }
+        return res;
     }
 
     // Parsea un array json a Vehiculos
@@ -294,7 +310,6 @@ class HomeController
                     const modal_status = document.getElementById("modal_status");
                     const modal_error = document.getElementById("modal_error");
                     const tr_error = modal_error.closest("tr");
-
                     const modal_mensaje = document.getElementById("modal_mensaje");
 
                     if(res.status == 200){
@@ -425,17 +440,78 @@ class HomeController
                 boton.classList.add("hidden");
                 
                 for (const element of btns) {
-                    element.addEventListener("click", () =>{
+                    element.addEventListener("click", async () =>{
+                        const modal = document.getElementById('staticBackdrop');
+                        const loader_text = document.getElementById("loader_text");
+                        const instance = new bootstrap.Modal(modal);
+
+                        Loader.Show("modal_loader");
+                        loader_text.classList.remove("hidden");
+                        instance.show();
+
+                        let v = null;
                         vehiculos.forEach(vehiculo => {
                             if(vehiculo.id == tr.getAttribute("data-id")){
-                                if(vehiculo instanceof Aereo){
-                                    console.log("esAereo");
-                                }
-                                else {
-                                    console.log("esterrestr");
-                                }
+                                v = vehiculo;
                             }
                         });
+
+                        let camposComunes = false;
+                        if(this.ValidarString(td_list[1].innerText) && 
+                           this.ValidarAnoFab(td_list[2].innerText) &&
+                           this.ValidarNumMayorA0(td_list[3].innerText)){
+                            camposComunes = true;
+                        }
+                        
+
+                        if(v instanceof Aereo){
+                            if(this.ValidarNumMayorA0(td_list[4].innerText) && 
+                               this.ValidarNumMayorA0(td_list[5].innerText) &&
+                               camposComunes)
+                            {
+                                v.modelo = td_list[1].innerText;
+                                v.anoFab = td_list[2].innerText;
+                                v.velMax = td_list[3].innerText;
+                                v.altMax = td_list[4].innerText;
+                                v.autonomia = td_list[5].innerText;
+                            }
+                        }
+                        else{
+                            if(this.ValidarCantPue(td_list[6].innerText) && 
+                               this.ValidarNumMayorA0(td_list[7].innerText) &&
+                               camposComunes){
+
+                            }
+                            v.modelo = td_list[1].innerText;
+                            v.anoFab = td_list[2].innerText;
+                            v.velMax = td_list[3].innerText;
+                            v.cantPue = td_list[6].innerText;
+                            v.cantRue = td_list[7].innerText;
+                        }
+
+                        let res = await this.PutVehiculoFetch(v);
+                        const modal_status = document.getElementById("modal_status");
+                        const modal_error = document.getElementById("modal_error");
+                        const tr_error = modal_error.closest("tr");
+                        const modal_mensaje = document.getElementById("modal_mensaje");
+    
+                        modal_status.textContent = res.status;
+
+                        if(res.status === 200){
+                            modal_mensaje.textContent = res.message.id;
+                            tr_error.classList.add("hidden");
+                            loader_text.classList.add("hidden");
+                            table_response.classList.remove("hidden");
+
+                            Loader.Hide("modal_loader");
+                        }
+                        else{
+                            modal_mensaje.textContent = res.message,
+                            tr_error.classList.remove("hidden");
+                            loader_text.classList.add("hidden");
+                            table_response.classList.remove("hidden");
+                        }
+
                     });
                     element.classList.remove("hidden");
                 }
@@ -553,9 +629,7 @@ class HomeController
                     result = false;
                 }
                 break;
-            
-                sw
-            
+                
                 default:
                 result = false;
                 break;
