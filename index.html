@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Titulo -->
+    <title>Recuperatorio Segundo Parcial</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="./src/styles/main.css">
+    <link rel="stylesheet" href="./src/styles/pantalla-carga.css">
+
+    <!-- Aplicacion -->
+    <script type="module" src="./app.js"></script>
+</head>
+<body>
+    <!-- Load Screen -->
+    <div id="main_loader" class="loader">
+        <div class="lds-ellipsis">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-theme="dark" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-2" id="staticBackdropLabel">Resultado</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal_loader" class="loader">
+                    <div class="lds-ellipsis">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <h1 id="loader_text" class="fs-4 hidden" style="text-align: center;">Procesando pertición</h1>
+
+                <!-- Tabla Status -->
+                <table class="table table-borderless hidden" id="table_response">
+                    <tbody>
+                        <tr>
+                            <th>Status code</th>
+                            <td id="modal_status">200</td>
+                        </tr>
+                        <tr>
+                            <th>Error</th>
+                            <td id="modal_error">X</td>
+                        </tr>
+                        <tr>
+                            <th>Mensaje</th>
+                            <td id="modal_mensaje">X</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="main_container">
+        
+        <h1>Segundo Parcial</h1>
+        
+        <!-- Formuario Lista -->
+        <section class="section_container" id="form_container">
+            <h2>Formulario Lista</h2>
+            
+            <!-- Tabla de Datos -->
+            <table id="table_lista" class="table table-dark">
+                <thead>
+                    <tr>
+                        <th class="encabezado">
+                            <button id="table_id" type="button" class="btn btn-outline-light">ID</button>
+                        </th>
+                        <th class="encabezado ">
+                            <button id="table_modelo" type="button" class="btn btn-outline-light">modelo</button>
+                        </th>
+                        <th class="encabezado ">
+                            <button id="table_anoFab" type="button" class="btn btn-outline-light">anoFab</button>
+                        </th>
+                        <th class="encabezado ">
+                            <button id="table_velMax" type="button" class="btn btn-outline-light">velMax</button>
+                        </th>
+                        <th class="encabezado ">
+                            <button id="table_altMax" type="button" class="btn btn-outline-light">altMax</button>
+                        </th>
+                        <th class="encabezado ">
+                            <button id="table_autonomia" type="button" class="btn btn-outline-light">autonomia</button>
+                        </th>
+                        <th class="encabezado ">
+                            <button id="table_cantPue" type="button" class="btn btn-outline-light">cantPue</button>
+                        </th>
+                        <th class="encabezado ">
+                            <button id="table_cantRue" type="button" class="btn btn-outline-light">cantRue</button>
+                        </th>
+                        <th class="encabezado">
+                            <button id="table_modificar" type="button" class="btn btn-outline-light">Modificar</button>
+                        </th>
+                        <th class="encabezado ">
+                            <button id="table_eliminar" type="button" class="btn btn-outline-light">Eliminar</button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <button id="btn_agregar_vehiculo" class="btn btn-success"><b>Agregar Elemento</b></button>
+        </section>
+
+        <!-- Formulario ABM -->
+        <section class="section_container hidden" id="abm_container">
+            <h2>Formulario ABM</h2>
+
+            <div id="form_abm">
+                <!-- Modelo -->
+                <div class="form-row">
+                    <label class="form-label" for="abm_modelo">Modelo *</label>
+                    <input class="form-control" type="text" id="abm_modelo" required>
+                    <span class="input_tooltip hidden">Ingresar nombre de modelo</span>
+                </div>
+                <!-- Año Fabricacion -->
+                <div class="form-row">
+                    <label class="form-label" for="abm_anoFab">Año de Fabricacion *</label>
+                    <input class="form-control" type="text" id="abm_anoFab" required>
+                    <span class="input_tooltip hidden">Ingresar un año mayor a 1885</span>
+                </div>
+                <!-- Velocidad Maxima -->
+                <div class="form-row">
+                    <label class="form-label" for="abm_velMax">Velocidad Maxima *</label>
+                    <input class="form-control" type="text" id="abm_velMax" required>
+                    <span class="input_tooltip hidden">Ingresar velocidad maxima mayor a 0</span>
+                </div>
+                <!-- Tipo -->
+                <div class="form-row">
+                    <label class="form-label" for="abm_tipo">Tipo</label>
+                    <select class="form-select" id="abm_tipo">
+                        <option value="aereo">Aereo</option>
+                        <option value="terrestre">Terrestre</option>
+                    </select>
+                </div>
+
+                <!-- Altura Maxima -->
+                <div class="form-row">
+                    <label class="form-label" for="abm_altMax">Altura Maxima *</label>
+                    <input class="form-control" type="text" id="abm_altMax" required>
+                    <span class="input_tooltip hidden">Ingresar altura maxima mayor a 0</span>
+                </div>
+                <!-- Autonomia -->
+                <div class="form-row">
+                    <label class="form-label" for="abm_autonomia">Autonomia *</label>
+                    <input class="form-control" type="text" id="abm_autonomia" required>
+                    <span class="input_tooltip hidden">Ingresar autonomia mayor a 0</span>
+                </div>
+
+                <!-- Cantidad de Puertas -->
+                <div class="form-row hidden">
+                    <label class="form-label" for="abm_cantPue">Cantidad de Puertas *</label>
+                    <input class="form-control" type="text" id="abm_cantPue" required>
+                    <span class="input_tooltip hidden">Ingresar cantidad de puertas mayor o igual a 0</span>
+                </div>
+                <!-- Cantidad de Ruedas -->
+                <div class="form-row hidden">
+                    <label class="form-label" for="abm_cantRue">Cantidad de Ruedas *</label>
+                    <input class="form-control" type="text" id="abm_cantRue" required>
+                    <span class="input_tooltip hidden">Ingresar cantidad de ruedas mayor a 0</span>
+                </div>
+
+                <!-- Confirmar y Cancelar -->
+                <div class="form-row" style="display: flex; flex-direction: row; justify-content: space-between;">
+                    <button id="abm_confirmar" type="submit" class="btn btn-primary" style="width: 80px;">Enviar</button>
+                    <button id="abm_cancelar" class="btn btn-danger" style="width: 80px;">Cancelar</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
