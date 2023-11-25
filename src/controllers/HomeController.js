@@ -331,7 +331,7 @@ class HomeController
                         // Carga la tabla con el erray actualizado
                         this.CargarTabla(vehiculos);
 
-                        this.HandleTable();
+                        this.HandleTable(vehiculos);
                     }
                     else {
                         // establece los mensajes
@@ -446,7 +446,8 @@ class HomeController
                         const instance = new bootstrap.Modal(modal);
 
                         Loader.Show("modal_loader");
-                        loader_text.classList.remove("hidden");
+                        loader_text.classList.remove("hidden");                            table_response.classList.remove("hidden");
+                        table_response.classList.add("hidden");
                         instance.show();
 
                         let v = null;
@@ -504,6 +505,12 @@ class HomeController
                             table_response.classList.remove("hidden");
 
                             Loader.Hide("modal_loader");
+
+                            const index = vehiculos.indexOf(v);
+                            vehiculos[index] = v;
+
+                            this.CargarTabla(vehiculos);
+                            this.HandleTable(vehiculos);
                         }
                         else{
                             modal_mensaje.textContent = res.message,
