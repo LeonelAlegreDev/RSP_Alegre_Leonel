@@ -81,12 +81,12 @@ class HomeController
     }
 
     // Parsea un array json a Vehiculos
-    static ParsearDatos(datos) 
+    static ParsearDatos(datos)
     {
         const vehiculos = datos.map((vehiculo) => {
             const esAereo = vehiculo.id && vehiculo.modelo && vehiculo.anoFab &&
                             vehiculo.velMax && vehiculo.altMax && vehiculo.autonomia;
-            const esTerrestre = vehiculo.id && vehiculo.modelo && vehiculo.anoFab && 
+            const esTerrestre = vehiculo.id && vehiculo.modelo && vehiculo.anoFab &&
                                 vehiculo.velMax && vehiculo.cantPue >= 0 && vehiculo.cantRue;
 
             // Comprueba el tipo de Vehiculo
@@ -182,20 +182,21 @@ class HomeController
             button_modificar.classList.add('btn');
             button_modificar.classList.add('btn-secondary');
 
-            let button_confirmar = document.createElement("button");            
+            let button_confirmar = document.createElement("button");
             button_confirmar.classList.add('btn');
             button_confirmar.classList.add('btn-success');
             button_confirmar.classList.add("hidden");
-            button_confirmar.style.margin = "0 4px 0 0"; 
+            button_confirmar.style.margin = "0 4px 0 0";
             td_modificar.appendChild(button_confirmar);
 
             let icon = document.createElement("i");
             icon.classList.add("bi-pencil-fill");
             button_confirmar.appendChild(icon);
 
-            let button_cancelar = document.createElement("button");            
+            let button_cancelar = document.createElement("button");
             button_cancelar.classList.add('btn');
             button_cancelar.classList.add('btn-danger');
+            button_cancelar.classList.add('table_cancelar');
             button_cancelar.classList.add("hidden");
             td_modificar.appendChild(button_cancelar);
 
@@ -212,6 +213,8 @@ class HomeController
             button_eliminar.appendChild(document.createTextNode("Eliminar"))
             button_eliminar.classList.add('btn');
             button_eliminar.classList.add('btn-danger');
+            button_eliminar.classList.add('table_eliminar');
+
         });
     }
 
@@ -247,7 +250,7 @@ class HomeController
     // Se encarga de realizar la solicitud y cargar el registro cuando se confirma la accion
     static HandleABMConfirmar(vehiculos){
         // Confirmacion del Alta ABM
-        document.getElementById("abm_confirmar").addEventListener("click", (event) =>{  
+        document.getElementById("abm_confirmar").addEventListener("click", (event) =>{
             const tipo = document.getElementById("abm_tipo").value;
             const result = this.ValidarCamposPorTipo(tipo)
 
@@ -285,9 +288,9 @@ class HomeController
                 switch (tipo) {
                     case "aereo":
                         vehiculo = new Aereo(
-                            0, 
-                            campos_comunes.modelo.value, 
-                            campos_comunes.anoFab.value, 
+                            0,
+                            campos_comunes.modelo.value,
+                            campos_comunes.anoFab.value,
                             campos_comunes.velMax.value,
                             campos_aereo.altMax.value,
                             campos_aereo.autonomia.value
@@ -295,9 +298,9 @@ class HomeController
                         break;
                     case "terrestre":
                         vehiculo = new Terrestre(
-                            0, 
-                            campos_comunes.modelo.value, 
-                            campos_comunes.anoFab.value, 
+                            0,
+                            campos_comunes.modelo.value,
+                            campos_comunes.anoFab.value,
                             campos_comunes.velMax.value,
                             campos_terrestre.cantPue.value,
                             campos_terrestre.cantRue.value
@@ -340,7 +343,7 @@ class HomeController
                         modal_error.textContent = res.error;
                         tr_error.classList.remove("hidden");
                     }
-                    
+
                     // Oculta el loader del modal de respuesta
                     Loader.Hide("modal_loader");
                     loader_text.classList.add("hidden");
@@ -412,7 +415,7 @@ class HomeController
             document.getElementById("form_container").style.display = "flex";;
 
             const requireFields = document.getElementById('form_abm').querySelectorAll('[required]');
-            
+
             // Oculta los mensajes de error
             for (const campo of requireFields) {
                 campo.nextElementSibling.classList.add("hidden");
@@ -423,7 +426,8 @@ class HomeController
     static HandleTable(vehiculos){
         let table = document.getElementById("table_lista");
         const botones_modificar = table.getElementsByClassName("btn-secondary");
-        
+        const botones_eliminar = table.getElementsByClassName("table_eliminar");
+
         // Maneja los eventos del boton moidifcar
         for(const boton of botones_modificar) {
             boton.addEventListener("click", () => {
@@ -438,7 +442,7 @@ class HomeController
                     td_list[i].setAttribute("contentEditable", "true")
                 }
                 boton.classList.add("hidden");
-                
+
                 for (const element of btns) {
                     element.addEventListener("click", async () =>{
                         const modal = document.getElementById('staticBackdrop');
@@ -458,15 +462,15 @@ class HomeController
                         });
 
                         let camposComunes = false;
-                        if(this.ValidarString(td_list[1].innerText) && 
+                        if(this.ValidarString(td_list[1].innerText) &&
                            this.ValidarAnoFab(td_list[2].innerText) &&
                            this.ValidarNumMayorA0(td_list[3].innerText)){
                             camposComunes = true;
                         }
-                        
+
 
                         if(v instanceof Aereo){
-                            if(this.ValidarNumMayorA0(td_list[4].innerText) && 
+                            if(this.ValidarNumMayorA0(td_list[4].innerText) &&
                                this.ValidarNumMayorA0(td_list[5].innerText) &&
                                camposComunes)
                             {
@@ -478,7 +482,7 @@ class HomeController
                             }
                         }
                         else{
-                            if(this.ValidarCantPue(td_list[6].innerText) && 
+                            if(this.ValidarCantPue(td_list[6].innerText) &&
                                this.ValidarNumMayorA0(td_list[7].innerText) &&
                                camposComunes){
 
@@ -495,7 +499,7 @@ class HomeController
                         const modal_error = document.getElementById("modal_error");
                         const tr_error = modal_error.closest("tr");
                         const modal_mensaje = document.getElementById("modal_mensaje");
-    
+
                         modal_status.textContent = res.status;
 
                         if(res.status === 200){
@@ -530,6 +534,29 @@ class HomeController
                 }
             });
         };
+
+        // Maneja los eventos del boton eliminar
+        for(const boton of botones_eliminar) {
+            boton.addEventListener("click", () => {
+                const modal = document.getElementById('staticBackdrop');
+                const loader_text = document.getElementById("loader_text");
+                const instance = new bootstrap.Modal(modal);
+                const buttons = document.getElementById('modal_buttons');
+
+                // Loader.Show("modal_loader");
+                // loader_text.classList.remove("hidden");                            table_response.classList.remove("hidden");
+                Loader.Hide("modal_loader");
+                table_response.classList.add("hidden");
+                buttons.classList.remove("hidden");
+
+                instance.show();
+            });
+        }
+
+        document.getElementById("modal_cancel").addEventListener("click", () => {
+            const modal = document.getElementById('staticBackdrop');
+            modal.classList.add("hidden");
+        });
     }
 
     static ValidarCamposPorTipo(tipo) {
@@ -554,7 +581,7 @@ class HomeController
         const validacionModelo = this.ValidarString(campos_comunes.modelo.value);
         const validacionAno = this.ValidarAnoFab(campos_comunes.anoFab.value);
         const validacionVel = this.ValidarNumMayorA0(campos_comunes.velMax.value);
-        
+
         // Si la validacion da false se muestra mensaje de error
         if(validacionModelo){
             // Oculta el mensaje de error
@@ -584,7 +611,7 @@ class HomeController
             campos_comunes.velMax.nextElementSibling.classList.remove("hidden");
             result = false;
         }
-        
+
         // Verifica que los campos hayan sido completados segun su tipo
         switch (tipo) {
             case "aereo":
@@ -615,7 +642,7 @@ class HomeController
             case "terrestre":
                 const validacionPue = this.ValidarCantPue(campos_aereo.altMax.value);
                 const validacionRue = this.ValidarNumMayorA0(campos_terrestre.cantRue.value);
-                
+
                 // Si la validacion da false se muestra mensaje de error
                 if(validacionPue){
                     // Oculta el mensaje de error
@@ -636,7 +663,7 @@ class HomeController
                     result = false;
                 }
                 break;
-                
+
                 default:
                 result = false;
                 break;
