@@ -47,12 +47,6 @@
                     </div>
                 </div>
                 <h1 id="loader_text" class="fs-4 hidden" style="text-align: center;">Procesando pertición</h1>
-
-                <div class="row hidden" id="modal_buttons">
-                    <h1 class="fs-4" style="text-align: center;">Esta seguro que desea borrar el registro?</h1>
-                    <button class="btn btn-secondary" id="modal_cancel" style="margin-bottom: 15px;">Cancelar</button>
-                    <button class="btn btn-danger" id="modal_delete">Eliminar</button>
-                </div>
                 <!-- Tabla Status -->
                 <table class="table table-borderless hidden" id="table_response">
                     <tbody>
@@ -77,7 +71,26 @@
         </div>
         </div>
     </div>
-
+    <div class="modal fade" id="modal_confirmation" data-bs-theme="dark" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-2" id="staticBackdropLabel">Resultado</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="modal_buttons">
+                    <h1 class="fs-4" style="text-align: center;">Esta seguro que desea borrar el registro?</h1>
+                    <button class="btn btn-secondary" id="modal_cancel" style="margin-bottom: 15px;">Cancelar</button>
+                    <button class="btn btn-danger" id="modal_delete">Eliminar</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
     <!-- Main Container -->
     <div id="main_container">
         

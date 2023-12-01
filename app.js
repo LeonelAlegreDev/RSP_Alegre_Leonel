@@ -1,5 +1,9 @@
 import HomeController from "./src/controllers/HomeController.js";
-import Loader from "./src/utils/Loader.js";
+import ABM from "./src/components/ABM.js";
+import Modal from "./src/components/Modal.js";
+import Table from "./src/components/Table.js";
+
+import Loader from "./src/components/Loader.js";
 
 // Muestra la pantalla de carga
 document.documentElement.addEventListener("load", function(){
@@ -13,15 +17,15 @@ let vehiculos = await HomeController.GetVehiculosFetch();
 vehiculos = HomeController.ParsearDatos(vehiculos);
 
 // Carga la tabla con los datos
-HomeController.CargarTabla(vehiculos);
+Table.CargarTabla(vehiculos);
 
 // Activa manejadores para los eventos del form ABM
-HomeController.HandleABM(vehiculos);
+ABM.HandleABM(vehiculos);
 
 // Maneja las acciones del modal
-HomeController.HandleModal();
+Modal.HandleModal("staticBackdrop");
 
-HomeController.HandleTable(vehiculos);
+Table.HandleTable(vehiculos);
 
 // Oculta la pantalla de carga
 Loader.Hide("main_loader");
